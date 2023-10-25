@@ -45,7 +45,7 @@ def send_post_request(api_url: str,
 
 def search(api_url: str, api_key: str, search_term: str) -> List[str]:
     """Search for a given term"""
-    request_url = f"{api_url}/document?offset=0&limit=3"
+    request_url = f"{api_url}/document?offset=0&limit=2"
     search_query = {
         "search_term": search_term,
     }
