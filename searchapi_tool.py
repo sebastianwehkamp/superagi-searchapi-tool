@@ -1,7 +1,6 @@
 from typing import Optional, Dict, Union, List, Type
 import json
 import requests
-import os
 
 from superagi.tools.base_tool import BaseTool
 from pydantic import BaseModel, Field
@@ -44,10 +43,8 @@ def send_post_request(api_url: str,
         return None
 
 
-def search(search_term: str) -> List[str]:
+def search(api_url: str, api_key: str, search_term: str) -> List[str]:
     """Search for a given term"""
-    api_url = os.getenv('API_URL')
-    api_key = os.getenv('API_KEY')
     request_url = f"{api_url}/document?offset=0&limit=3"
     search_query = {
         "search_term": search_term,
@@ -82,7 +79,10 @@ class SearchAPITool(BaseTool):
     args_schema: Type[BaseModel] = SearchAPIInput
 
     def _execute(self,search_term: str):
-        results = search(search_term)
+        api_url = self.get_tool_config("SEARCH_API_URL")
+        api_key = self.get_tool_config("SEARCH_API_KEY")
+        
+        results = search(api_url, api_key, search_term)
         if results:
             return results
         else:
